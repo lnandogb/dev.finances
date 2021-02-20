@@ -49,6 +49,11 @@ h2 {
 
 /*Links & Buttons ================= */
 
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
 a {
     color: var(--green);
     text-decoration: none;

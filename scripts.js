@@ -3,8 +3,8 @@ const Modal = {
         //Abrir modal
         //Adicionar classe active ao modal
         document
-                .querySelector('.field')
-                .innerHTML = ""
+            .querySelector('.field')
+            .innerHTML = ""
         document
             .querySelector('.modal-overlay')
             .classList.add('active');
@@ -18,8 +18,8 @@ const Modal = {
         Form.date.value = ""
 
         document
-                .querySelector('.field')
-                .innerHTML = ""
+            .querySelector('.field')
+            .innerHTML = ""
         document
             .querySelector('.modal-overlay')
             .classList.remove('active');
@@ -35,9 +35,9 @@ const Storage = {
     }
 }
 
-const Transaction = {   
+const Transaction = {
     all: Storage.get(),
-    
+
     add(transaction) {
         Transaction.all.push(transaction);
 
@@ -51,13 +51,13 @@ const Transaction = {
     },
 
     incomes() {
-        
+
         let income = 0;
         // pegar todas as transações
         // para cada transação
         Transaction.all.forEach(transaction => {
             // se ela for maior que zero
-            if(transaction.amount > 0) {
+            if (transaction.amount > 0) {
                 // somar a uma variável
                 income += transaction.amount;
             }
@@ -69,7 +69,7 @@ const Transaction = {
     expenses() {
         let expense = 0;
         Transaction.all.forEach(transaction => {
-            if(transaction.amount < 0) {
+            if (transaction.amount < 0) {
                 expense += transaction.amount;
             }
         })
@@ -111,25 +111,25 @@ const DOM = {
 
     updateBalance() {
         document
-        .querySelector('#incomeDisplay')
-        .innerHTML = Utils.formatCurrency(Transaction.incomes())
+            .querySelector('#incomeDisplay')
+            .innerHTML = Utils.formatCurrency(Transaction.incomes())
         document
-        .querySelector('#expenseDisplay')
-        .innerHTML = Utils.formatCurrency(Transaction.expenses())
+            .querySelector('#expenseDisplay')
+            .innerHTML = Utils.formatCurrency(Transaction.expenses())
         document
-        .querySelector('#totalDisplay')
-        .innerHTML = Utils.formatCurrency(Transaction.total())
+            .querySelector('#totalDisplay')
+            .innerHTML = Utils.formatCurrency(Transaction.total())
 
-        if(Transaction.total() < 0) {
+        if (Transaction.total() < 0) {
             document
-            .querySelector('.card.total')
-            .classList.add('negative')
+                .querySelector('.card.total')
+                .classList.add('negative')
         } else {
             document
-            .querySelector('.card.total')
-            .classList.remove('negative')
+                .querySelector('.card.total')
+                .classList.remove('negative')
         }
-      
+
     },
 
     clearTransactions() {
@@ -138,9 +138,9 @@ const DOM = {
 }
 
 const Utils = {
-    formatAmount(value){
+    formatAmount(value) {
         value = Number(value) * 100
-       
+
         return value
     },
 
@@ -180,18 +180,18 @@ const Form = {
     },
 
     validateFields() {
-        const {description, amount, date} = Form.getValues()
+        const { description, amount, date } = Form.getValues()
 
-        if(
-            description.trim() === "" || 
-            amount.trim() ==="" || 
-            date.trim() === "" ) {
-                throw new Error("*Por favor, preencha todos os campos")
+        if (
+            description.trim() === "" ||
+            amount.trim() === "" ||
+            date.trim() === "") {
+            throw new Error("*Por favor, preencha todos os campos")
         }
     },
 
-    formatValues(){
-        let {description, amount, date} = Form.getValues()
+    formatValues() {
+        let { description, amount, date } = Form.getValues()
 
         amount = Utils.formatAmount(amount)
         date = Utils.formatDate(date)
@@ -202,7 +202,7 @@ const Form = {
         }
     },
 
-    clearFields(){
+    clearFields() {
         Form.description.value = ""
         Form.amount.value = ""
         Form.date.value = ""
@@ -223,11 +223,11 @@ const Form = {
             document
                 .querySelector('.field')
                 .classList.add('alert')
-            
+
             document
                 .querySelector('.field')
                 .innerHTML = `${error.message}`
-        }   
+        }
 
     }
 }
@@ -235,8 +235,8 @@ const Form = {
 const App = {
     init() {
         Transaction.all.forEach(DOM.addTransaction)
-            
-        
+
+
         DOM.updateBalance()
 
         Storage.set(Transaction.all)
@@ -245,6 +245,13 @@ const App = {
         DOM.clearTransactions()
         App.init()
     },
+}
+
+const Export = {
+    excel() {
+        var table2excel = new Table2Excel();
+        table2excel.export(document.querySelectorAll("#data-table"));
+    }
 }
 
 App.init()
