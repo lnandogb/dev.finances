@@ -3,6 +3,9 @@ const Modal = {
         //Abrir modal
         //Adicionar classe active ao modal
         document
+                .querySelector('.field')
+                .innerHTML = ""
+        document
             .querySelector('.modal-overlay')
             .classList.add('active');
 
@@ -10,6 +13,13 @@ const Modal = {
     close() {
         //Fechar o modal
         //Remover a classe active do modal
+        Form.description.value = ""
+        Form.amount.value = ""
+        Form.date.value = ""
+
+        document
+                .querySelector('.field')
+                .innerHTML = ""
         document
             .querySelector('.modal-overlay')
             .classList.remove('active');
@@ -92,7 +102,7 @@ const DOM = {
         <td class="${CSSclass}">${amount}</td>
         <td class="date">${transaction.date}</td>
         <td>
-            <img onclick="Transaction.remove(${index})" src="./assets/minus.svg" alt="Remover transação">
+            <img id="minus" onclick="Transaction.remove(${index})" src="./assets/minus.svg" alt="Remover transação">
         </td>
         `
 
@@ -110,6 +120,15 @@ const DOM = {
         .querySelector('#totalDisplay')
         .innerHTML = Utils.formatCurrency(Transaction.total())
 
+        if(Transaction.total() < 0) {
+            document
+            .querySelector('.card.total')
+            .classList.add('negative')
+        } else {
+            document
+            .querySelector('.card.total')
+            .classList.remove('negative')
+        }
       
     },
 
@@ -167,7 +186,7 @@ const Form = {
             description.trim() === "" || 
             amount.trim() ==="" || 
             date.trim() === "" ) {
-                throw new Error("Por favor, preencha todos os campos")
+                throw new Error("*Por favor, preencha todos os campos")
         }
     },
 
@@ -199,10 +218,16 @@ const Form = {
             Form.clearFields()
             Modal.close()
         } catch (error) {
-            alert(error.message)
-        }
+            //alert(error.message)
 
-        
+            document
+                .querySelector('.field')
+                .classList.add('alert')
+            
+            document
+                .querySelector('.field')
+                .innerHTML = `${error.message}`
+        }   
 
     }
 }
